@@ -1,0 +1,44 @@
+server:
+  port: 9000
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:1000/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user_service_route
+          uri: lb://user
+          predicates:
+            - Path=/user/**
+            - Weight=group1, 40
+          filters:
+            - StripPrefix=1
+        - id: user_service_route2
+          uri: lb://user2
+          predicates:
+            - Path=/user/**
+            - Weight=group1, 60
+          filters:
+            - StripPrefix=1
+        - id: user_service_route_auth
+          uri: lb://user
+          predicates:
+            - Path=/userapi/**
+          filters:
+            - StripPrefix=1
+            - Auth
+        - id: httpbin
+          uri: http://httpbin.org
+          predicates:
+            - Path=/httpbin
+          filters:
+            - StripPrefix=1
