@@ -39,6 +39,7 @@
         <module>gateway</module>
         <module>user2</module>
         <module>use-redis</module>
+        <module>use-db</module>
     </modules>
     <dependencies>
     </dependencies>
