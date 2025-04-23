@@ -39,6 +39,10 @@
         <module>gateway</module>
         <module>user2</module>
         <module>use-redis</module>
+        <module>use-db</module>
+        <module>use-rabbitmq</module>
+        <module>use-web</module>
+        <module>use_websocket</module>
     </modules>
     <dependencies>
     </dependencies>
