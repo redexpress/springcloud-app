@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  user:
+    image: app-user:latest
+    ports:
+      - 8700:8080
+    networks:
+      - spring_network
+    depends_on:
+      discovery:
+        condition: service_healthy
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: always
+
+  order:
+    image: app-order:latest
+    ports:
+      - 8800:8080
+    networks:
+      - spring_network
+    depends_on:
+      discovery:
+        condition: service_healthy
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: always
+
+  discovery:
+    image: app-discovery:latest
+    ports:
+      - 8100:8080
+    networks:
+      - spring_network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost:8080 || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+networks:
+  spring_network:
+    driver: bridge
